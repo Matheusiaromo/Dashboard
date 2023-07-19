@@ -1,0 +1,23 @@
+
+
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+  }
+  
+  main {
+    flex: 1;
+  }
+
+  .container {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
