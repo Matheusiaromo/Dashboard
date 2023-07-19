@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
+import { ref } from 'vue'
+
+let toogleMenu = ref(false)
+
 </script>
 
 <template>
@@ -7,12 +11,16 @@ import { RouterLink } from 'vue-router';
     <div class="container">
       <a href="#">LOGO</a>
 
-      <nav>
+      <nav :class="toogleMenu ? 'active' : null">
+         <span class="menu-mobile" @click="toogleMenu = !toogleMenu">
+          <i v-if="!toogleMenu" class="fas fa-bars"></i>
+          <i v-else class="fas fa-times"></i>
+         </span>
          <ul>
-          <router-link :to="{name: 'home'}" tag="li">Home</router-link>
-          <router-link :to="{name: 'login'}" tag="li">Login</router-link>
-          <router-link :to="{name: 'register'}" tag="li">Register</router-link>
-          <router-link :to="{name: 'dsahboard'}" tag="li">Dashboard</router-link>
+          <router-link :to="{name: 'home'}">Home</router-link>
+          <router-link :to="{name: 'login'}">Login</router-link>
+          <router-link :to="{name: 'register'}">Register</router-link>
+          <router-link :to="{name: 'dashboard'}">Dashboard</router-link>
          </ul>
       </nav>
     </div>
@@ -26,7 +34,7 @@ header {
   color: #fff;
 }
 
-header .container {
+ .container {
   display: flex;
   justify-content: space-between;
   padding-top: 20px;
@@ -34,17 +42,64 @@ header .container {
   align-items: center;
 }
 
-header ul {
+ ul {
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: center;
 }
 
-header ul a {
+ ul a {
   padding: 10px;
   outline: none;
   text-decoration: none;
+  cursor: pointer;
+  transition: .3s;
+}
+
+ul a:hover {
+  background: #fff;
+  color: #000;
+  transition: .3s;
+}
+
+.menu-mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .menu-mobile {
+    display: block;
+    z-index: 2;
+    position: relative;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 59px;
+    right: -100vw;
+    width: 100vw;
+    background: #000;
+    overflow: hidden;
+    transition: .5s;
+    gap: 0px;
+    opacity: 0;
+  }
+
+  .active ul {
+    right: 0;
+    transition: .5s;
+    opacity: 1;
+  }
+
+  ul a {
+   width: 100%;
+   text-align: center;
+   padding: 20px;
+   border-bottom: 1px solid rgb(193, 193, 193);
+  }
 }
 
 </style>

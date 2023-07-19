@@ -1,11 +1,77 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const form = ref({
+  email: "",
+  password: ""
+})
+
+</script>
+
 <template>
   <section>
     <div class="container">
-      <h1>Aqui é o login</h1>
+      
+        <form>
+          <h1>Acesse a sua conta:</h1>
+          <input type="email" v-model="form.email" placeholder="Digite seu e-mail">
+          <input type="password" v-model="form.password" placeholder="Digite sua senha">
+          <button class="btn">Entrar</button>
+        </form>
+
+        <p>Ainda não possui cadastro? <router-link :to="{ name: 'register' }">Criar uma conta</router-link></p>
+      
     </div>
   </section>
 </template>
 
-<style>
+<style scoped>
+.container {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  height: 100%;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+p {
+  margin-top: 20px;
+}
+
+p > * {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #000;
+  margin: 0 auto;
+  width: 440px;
+  padding: 20px;
+}
+
+form h1 {
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+@media (max-width:500px) {
+  form {
+    width: 100%;
+  }
+}
 </style>
