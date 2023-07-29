@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-    baseURL: 'https://produtos.omatheusdev.com/'
+    baseURL: import.meta.env.VITE_BASE_URL
 })
 
 export const api = {
@@ -18,7 +18,7 @@ export const api = {
         return axiosInstance.put(endpoint)
     },
     login(body) {
-        return axiosInstance.post('/login', body)
+        return axiosInstance.post('/jwt-auth/v1/token', body)
     },
     refresh() {
         return axiosInstance.post('/refresh')

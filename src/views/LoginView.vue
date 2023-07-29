@@ -20,11 +20,15 @@
 <script setup lang="ts">
 
   import { reactive, ref } from 'vue'
-  import { api }  from '../services/https.js'
   import ErroForms from '@/components/ErroForms.vue'
+  import {useAuthStore} from '@/stores/auth.ts'
+  import { api } from '@/services/api.js'
+  import router from '@/router';
 
   let erros: Array<string> = reactive([])
   const isLoading = ref(false);
+
+  const auth = useAuthStore()
 
   const form = reactive({
     username: "",
@@ -33,19 +37,28 @@
 
   async function login() {
 
-    //zera o array
     erros.splice(0, erros.length);
     isLoading.value = true
 
     try {
-
-      const {data} = await api.post("/wp-json/jwt-auth/v1/token", form)
+      const { data } = await api.login(form)
+      const token = data.token
+      const user = {
+        name: data.user_display_name,
+        email: data.user_email
+      }
 
       console.log(data)
+
+      auth.login(token, user)
+
+      router.push({name: 'dashboard'})
+      
+
     } catch (error) {
-      console.log(error.response.data.message)
-      erros.push(error.response.data.message)
+      console.log(error)
       isLoading.value = false
+      erros.push(error.response.data.message)
     }
 
   }
