@@ -11,7 +11,7 @@ console.log(auth)
 <template>
   <section>
     <div class="container">
-      <h1>Bem vindo ao dashboard {{ auth.$state.user.name }}</h1>
+      <h1>Bem vindo ao dashboard {{ auth.$state.usuario.nome }}</h1>
     </div>
   </section>
 </template>

@@ -33,7 +33,8 @@ const router = createRouter({
       name: 'dashboard',
       component: () => import('../views/DashboardView.vue'),
       meta: {
-        layout: 'default'
+        layout: 'default',
+        login: true
       }
     }
   ]

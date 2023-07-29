@@ -6,7 +6,7 @@
           <h1>Acesse a sua conta:</h1>
           <input type="email" v-model="form.username" placeholder="Digite seu e-mail">
           <input type="password" v-model="form.password" placeholder="Digite sua senha">
-          <button @click.prevent="login" :disabled="isLoading" class="btn">Entrar</button>
+          <button @click.prevent="logar" :disabled="isLoading" class="btn">Entrar</button>
           <ErroForms :erros="erros"/>
         </form>
 
@@ -21,8 +21,7 @@
 
   import { reactive, ref } from 'vue'
   import ErroForms from '@/components/ErroForms.vue'
-  import {useAuthStore} from '@/stores/auth.ts'
-  import { api } from '@/services/api.js'
+  import { useAuthStore } from '@/stores/auth.ts'
   import router from '@/router';
 
   let erros: Array<string> = reactive([])
@@ -35,31 +34,21 @@
     password: ""
   })
 
-  async function login() {
-
+  async function logar() {
     erros.splice(0, erros.length);
     isLoading.value = true
 
-    try {
-      const { data } = await api.login(form)
-      const token = data.token
-      const user = {
-        name: data.user_display_name,
-        email: data.user_email
-      }
+    await auth.logarUsuario(form)
+    .then(() => {
 
-      console.log(data)
+      /* auth.setUsuario(data)  */
+      router.push({name: "dashboard"})
 
-      auth.login(token, user)
-
-      router.push({name: 'dashboard'})
-      
-
-    } catch (error) {
+    }).catch(error => {
+      erros.push(error.response.data.message)
       console.log(error)
       isLoading.value = false
-      erros.push(error.response.data.message)
-    }
+    })
 
   }
 
