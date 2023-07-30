@@ -33,11 +33,23 @@ const router = createRouter({
       name: 'dashboard',
       component: () => import('../views/DashboardView.vue'),
       meta: {
-        layout: 'default',
+        layout: 'dashboard',
         login: true
       }
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.login)) {
+    if (!window.localStorage.token) {
+      next("/login")
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

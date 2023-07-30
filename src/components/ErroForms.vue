@@ -15,7 +15,7 @@
 
 <style>
 .erro {
-    margin-top: 10px;
+    margin-top: 5px;
     list-style: none;
     display: flex;
     flex-direction: column;
