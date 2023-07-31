@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { useAuth } from '@/stores/auth';
+import { useAuth } from "@/stores/auth.ts";
 
 const auth = useAuth();
 

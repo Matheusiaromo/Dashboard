@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from "vue";
 
 const form = ref({
   email: "",
@@ -8,7 +8,7 @@ const form = ref({
   password: "",
   confirmPassword: ""
   
-})
+});
 
 </script>
 

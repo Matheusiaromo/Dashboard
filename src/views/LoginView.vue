@@ -19,54 +19,41 @@
 
 <script setup lang="ts">
 
-  import { reactive, ref } from 'vue'
-  import ErroForms from '@/components/ErroForms.vue'
-  import { useAuth } from '@/stores/auth.ts'
-  import { api } from '@/services/api.js'
-  import router from '@/router';
+import { reactive, ref } from "vue";
+import ErroForms from "@/components/ErroForms.vue";
+import { useAuth } from "@/stores/auth.ts";
+import { api } from "@/services/api.js";
+import router from "@/router";
 
-  let erros: Array<string> = reactive([])
-  const isLoading = ref(false);
+let erros: Array<string> = reactive([]);
+const isLoading = ref(false);
 
-  const auth = useAuth()
+const auth = useAuth();
 
-  const user = reactive({
-    username: "",
-    password: ""
-  })
+const user = reactive({
+  username: "",
+  password: ""
+});
 
-  async function logar() {
-    erros.splice(0, erros.length);
-    isLoading.value = true
+async function logar() {
+  erros.splice(0, erros.length);
+  isLoading.value = true;
 
-    try {
-      const { data } = await api.login(user)
-      auth.setToken(data.token)
-      auth.setUser({
-        nome: data.user_display_name,
-        email: data.user_email
-      })
+  try {
+    const { data } = await api.login(user);
+    auth.setToken(data.token);
+    auth.setUser({
+      nome: data.user_display_name,
+      email: data.user_email
+    });
 
-      router.push({name: "dashboard"})
-    } catch (error) {
-      isLoading.value = false
-      erros.push(error.response.data.message)
-    }
-
-    /* token
-: 
-"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcHJvZHV0b3Mub21hdGhldXNkZXYuY29tIiwiaWF0IjoxNjkwNzczMjU3LCJuYmYiOjE2OTA3NzMyNTcsImV4cCI6MTY5MTM3ODA1NywiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMyJ9fX0.RJ1tdWW6IYYaLtI7ij_BmPfL-Aj4dvzaFmFHMKgO4UM"
-user_display_name
-: 
-"matheus"
-user_email
-: 
-"matheus@gmail.com"
-user_nicename
-: 
-"matheusgmail-com"
- */
+    router.push({name: "dashboard"});
+  } catch (error) {
+    isLoading.value = false;
+    erros.push(error.response.data.message);
   }
+
+}
 
 </script>
 
