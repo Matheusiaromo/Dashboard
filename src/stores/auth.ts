@@ -1,41 +1,51 @@
 import { defineStore } from 'pinia'
-import { api } from '@/services/api.js'
-import router from '@/router';
+import { ref, computed } from 'vue'
+import { api } from '@/services/api'
+import router from "@/router"
 
-export const useAuthStore = defineStore('auth', {
-    state: () => ({
-        logado: false,
-        usuario: {
-            id: "",
-            nome: "",
-            email: ""
+export const useAuth = defineStore('auth', () => {
+    const token = ref(localStorage.getItem("token"))
+    const user = ref(JSON.parse(localStorage.getItem("user")))
+
+   const isAuthenticated = computed(() => {
+        return token.value & user.value
+   })
+
+    function setToken(tokenValue) {
+        localStorage.setItem("token", tokenValue)
+        token.value = tokenValue
+    }
+
+    function setUser(userValue) {
+        localStorage.setItem("user", JSON.stringify(userValue))
+        user.value = userValue
+    }
+
+    async function checkToken() {
+        try {
+            const tokenAuth = `Bearer ${token.value}`
+            const data = api.validateToken(tokenAuth)
+            return data
+        } catch (error) {
+            console.log(error.response.data)
         }
-    }),
-    actions: {
-        logarUsuario(user) {
-            return api.login({
-                username: user.username,
-                password: user.password
-            }).then(response => {
-                window.localStorage.token = `Bearer ${response.data.token}`
-                this.setUsuario(response.data)
-                this.logado = true
-            })
-        },
-        setUsuario(data) {
-            this.usuario.id = ""
-            this.usuario.nome = data.user_display_name
-            this.usuario.email = data.user_email
-        },
-        deslogarUsuario() {
-            this.logado = false,
-                window.localStorage.removeItem("token")
-            this.usuario = {
-                id: "",
-                nome: "",
-                email: ""
-            }
-            router.push({ name: "login" })
-        }
+    }
+
+    function clear() {
+        user.value = []
+        token.value = ""
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
+        router.push({name: "login"})
+    }
+
+    return {
+        token,
+        user,
+        setToken, 
+        setUser,
+        checkToken,
+        clear,
+        isAuthenticated
     }
 })

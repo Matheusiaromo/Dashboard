@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router';
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuth } from '@/stores/auth'
 
 let toogleMenu = ref(false)
-const auth = useAuthStore()
+const auth = useAuth()
 
 function deslogarUsuario() {
-    auth.deslogarUsuario()
+    auth.clear()
 }
 
 </script>

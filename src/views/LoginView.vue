@@ -4,8 +4,8 @@
       
         <form>
           <h1>Acesse a sua conta:</h1>
-          <input type="email" v-model="form.username" placeholder="Digite seu e-mail">
-          <input type="password" v-model="form.password" placeholder="Digite sua senha">
+          <input type="email" v-model="user.username" placeholder="Digite seu e-mail">
+          <input type="password" v-model="user.password" placeholder="Digite sua senha">
           <button @click.prevent="logar" :disabled="isLoading" class="btn">Entrar</button>
           <ErroForms :erros="erros"/>
         </form>
@@ -21,15 +21,16 @@
 
   import { reactive, ref } from 'vue'
   import ErroForms from '@/components/ErroForms.vue'
-  import { useAuthStore } from '@/stores/auth.ts'
+  import { useAuth } from '@/stores/auth.ts'
+  import { api } from '@/services/api.js'
   import router from '@/router';
 
   let erros: Array<string> = reactive([])
   const isLoading = ref(false);
 
-  const auth = useAuthStore()
+  const auth = useAuth()
 
-  const form = reactive({
+  const user = reactive({
     username: "",
     password: ""
   })
@@ -38,18 +39,33 @@
     erros.splice(0, erros.length);
     isLoading.value = true
 
-    await auth.logarUsuario(form)
-    .then(() => {
+    try {
+      const { data } = await api.login(user)
+      auth.setToken(data.token)
+      auth.setUser({
+        nome: data.user_display_name,
+        email: data.user_email
+      })
 
-      /* auth.setUsuario(data)  */
       router.push({name: "dashboard"})
-
-    }).catch(error => {
-      erros.push(error.response.data.message)
-      console.log(error)
+    } catch (error) {
       isLoading.value = false
-    })
+      erros.push(error.response.data.message)
+    }
 
+    /* token
+: 
+"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vcHJvZHV0b3Mub21hdGhldXNkZXYuY29tIiwiaWF0IjoxNjkwNzczMjU3LCJuYmYiOjE2OTA3NzMyNTcsImV4cCI6MTY5MTM3ODA1NywiZGF0YSI6eyJ1c2VyIjp7ImlkIjoiMyJ9fX0.RJ1tdWW6IYYaLtI7ij_BmPfL-Aj4dvzaFmFHMKgO4UM"
+user_display_name
+: 
+"matheus"
+user_email
+: 
+"matheus@gmail.com"
+user_nicename
+: 
+"matheusgmail-com"
+ */
   }
 
 </script>

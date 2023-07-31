@@ -1,17 +1,15 @@
 <script setup lang="ts">
 
-import { useAuthStore } from '@/stores/auth';
+import { useAuth } from '@/stores/auth';
 
-const auth = useAuthStore();
-
-console.log(auth)
+const auth = useAuth();
 
 </script>
 
 <template>
   <section>
     <div class="container">
-      <h1>Bem vindo ao dashboard {{ auth.$state.usuario.nome }}</h1>
+      <h1>Bem vindo ao dashboard {{ auth.$state.user.nome }}</h1>
     </div>
   </section>
 </template>

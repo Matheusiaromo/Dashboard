@@ -2,8 +2,6 @@
     <component :is="layout">
       <RouterView />
     </component>
-      
-   
 </template>
 
 <script setup lang="ts">
